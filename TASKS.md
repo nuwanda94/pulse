@@ -113,7 +113,7 @@ Status values: `pending` | `in_progress` | `done`
 
 ## 15. feat: load-test harness and benchmark script
 
-- [ ] Status: pending
+- [ ] Status: in_progress
 - Locustfile (or k6) covering single + batch ingest + query paths.
 - `scripts/benchmark.py` that runs under controlled conditions and writes `BENCHMARKS.md` with RPS / latency percentiles.
 - CI-friendly; no manual numbers in README.
