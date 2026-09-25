@@ -70,7 +70,7 @@ Status values: `pending` | `in_progress` | `done`
 
 ## 9. feat: batch event ingest (high-throughput path)
 
-- [ ] Status: pending
+- [ ] Status: in_progress
 - `POST /v1/events/batch` – accept list of events, use efficient bulk insert or Redis buffer.
 - Idempotency-Key support.
 - Load-oriented tests (correctness under concurrent calls).
