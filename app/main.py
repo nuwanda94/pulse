@@ -13,6 +13,7 @@ from app.api.auth import router as auth_router
 from app.api.events import router as events_router
 from app.api.health import router as health_router
 from app.api.metrics import router as metrics_router
+from app.api.queries import router as queries_router
 from app.api.usage import router as usage_router
 from app.core.config import Settings, get_settings
 from app.core.metrics import MetricsMiddleware
@@ -80,6 +81,7 @@ def create_app(
     application.include_router(events_router)
     application.include_router(usage_router)
     application.include_router(aggregates_router)
+    application.include_router(queries_router)
     return application
 
 
