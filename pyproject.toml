@@ -28,6 +28,7 @@ dev = [
     "pytest-cov>=6.0.0",
     "locust>=2.32.0",
     "types-redis",
+    "aiosqlite>=0.20.0",
 ]
 
 [build-system]
