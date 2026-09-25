@@ -62,7 +62,7 @@ Status values: `pending` | `in_progress` | `done`
 
 ## 8. feat: single event ingest
 
-- [ ] Status: in_progress
+- [x] Status: done
 - `POST /v1/events` – accept event payload (name, value, tags, timestamp).
 - Persist to Postgres (or buffer).
 - Auth required.
