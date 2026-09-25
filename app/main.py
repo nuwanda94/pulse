@@ -6,7 +6,9 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
 from app.api.health import router as health_router
+from app.api.metrics import router as metrics_router
 from app.core.config import Settings, get_settings
+from app.core.metrics import MetricsMiddleware
 
 
 @asynccontextmanager
@@ -23,7 +25,9 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         lifespan=lifespan,
     )
     application.state.settings = resolved
+    application.add_middleware(MetricsMiddleware)
     application.include_router(health_router)
+    application.include_router(metrics_router)
     return application
 
 
