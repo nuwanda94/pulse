@@ -6,6 +6,8 @@ from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
+MAX_BATCH_SIZE = 1000
+
 
 class EventCreate(BaseModel):
     """Payload for ingesting a single event."""
@@ -40,3 +42,17 @@ class EventRead(BaseModel):
     timestamp: datetime
     created_at: datetime
     api_key_id: UUID | None = None
+
+
+class EventBatchCreate(BaseModel):
+    """Payload for ingesting many events in one request."""
+
+    events: list[EventCreate] = Field(min_length=1, max_length=MAX_BATCH_SIZE)
+
+
+class EventBatchRead(BaseModel):
+    """Result of a batch ingest."""
+
+    count: int
+    events: list[EventRead]
+    idempotent_replay: bool = False

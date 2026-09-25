@@ -1,10 +1,10 @@
-"""Tests for single-event ingest."""
+"""Tests for single-event and batch ingest."""
 
 from collections.abc import AsyncIterator, Iterator
 
 import pytest
 from fastapi.testclient import TestClient
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.pool import StaticPool
 
@@ -128,3 +128,75 @@ async def test_ingest_defaults_timestamp_and_round_trips(
         assert str(stored.id) == event_id
         assert stored.value == 12.0
         assert stored.api_key_id is not None
+
+
+def test_batch_requires_auth(client: TestClient) -> None:
+    response = client.post("/v1/events/batch", json={"events": [{"name": "cpu", "value": 1}]})
+    assert response.status_code == 401
+
+
+def test_batch_validates_empty_and_invalid(client: TestClient) -> None:
+    headers = {"X-API-Key": RAW_USER_KEY}
+    empty = client.post("/v1/events/batch", headers=headers, json={"events": []})
+    assert empty.status_code == 422
+    invalid = client.post(
+        "/v1/events/batch",
+        headers=headers,
+        json={"events": [{"name": "", "value": 1}]},
+    )
+    assert invalid.status_code == 422
+
+
+@pytest.mark.asyncio
+async def test_batch_persists_events(client: TestClient, sqlite_factory: Factory) -> None:
+    headers = {"X-API-Key": RAW_USER_KEY}
+    response = client.post(
+        "/v1/events/batch",
+        headers=headers,
+        json={
+            "events": [
+                {"name": "cpu", "value": 1.0, "tags": {"host": "a"}},
+                {"name": "mem", "value": 2.0},
+            ]
+        },
+    )
+    assert response.status_code == 201
+    body = response.json()
+    assert body["count"] == 2
+    assert body["idempotent_replay"] is False
+    assert [item["name"] for item in body["events"]] == ["cpu", "mem"]
+
+    async with sqlite_factory() as session:
+        total = await session.scalar(select(func.count()).select_from(Event))
+        assert total == 2
+
+
+def test_batch_idempotency_key_replays_without_duplicate(client: TestClient) -> None:
+    headers = {"X-API-Key": RAW_USER_KEY, "Idempotency-Key": "batch-1"}
+    payload = {"events": [{"name": "disk", "value": 9}]}
+    first = client.post("/v1/events/batch", headers=headers, json=payload)
+    second = client.post("/v1/events/batch", headers=headers, json=payload)
+    assert first.status_code == 201
+    assert second.status_code == 201
+    assert first.json()["events"][0]["id"] == second.json()["events"][0]["id"]
+    assert second.json()["idempotent_replay"] is True
+
+
+def test_batch_repeated_calls_persist_all_events(client: TestClient) -> None:
+    headers = {"X-API-Key": RAW_USER_KEY}
+    statuses = []
+    for index in range(16):
+        response = client.post(
+            "/v1/events/batch",
+            headers=headers,
+            json={
+                "events": [
+                    {"name": f"c{index}", "value": index},
+                    {"name": f"d{index}", "value": index + 0.5},
+                ]
+            },
+        )
+        statuses.append(response.status_code)
+        assert response.json()["count"] == 2
+
+    assert statuses == [201] * 16
