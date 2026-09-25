@@ -40,7 +40,7 @@ Status values: `pending` | `in_progress` | `done`
 
 ## 5. chore: database models and session
 
-- [ ] Status: pending
+- [ ] Status: in_progress
 - SQLAlchemy 2.0 async engine + session dependency.
 - Models: Event, MetricAggregate, ApiKey (minimal columns).
 - Alembic setup + initial migration.
