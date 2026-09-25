@@ -2,7 +2,7 @@
 
 from urllib.parse import urlparse
 
-import asyncpg  # type: ignore[import-untyped]
+import asyncpg  # type: ignore[import-not-found]
 from redis.asyncio import Redis
 
 
@@ -34,7 +34,7 @@ async def check_postgres(database_url: str) -> bool:
 
 async def check_redis(redis_url: str) -> bool:
     """Return True if Redis PING succeeds."""
-    client: Redis[bytes] = Redis.from_url(
+    client = Redis.from_url(
         redis_url,
         socket_connect_timeout=1,
         socket_timeout=1,

@@ -126,7 +126,7 @@ Status values: `pending` | `in_progress` | `done`
 
 ## 17. fix / polish: error handling, OpenAPI polish, README finalization
 
-- [ ] Status: in_progress
+- [x] Status: done
 - Consistent error responses, better OpenAPI descriptions, final README with generated benchmark placeholder.
 - Any remaining small fixes discovered during previous steps.
 

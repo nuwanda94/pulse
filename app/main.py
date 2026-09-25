@@ -16,6 +16,7 @@ from app.api.metrics import router as metrics_router
 from app.api.queries import router as queries_router
 from app.api.usage import router as usage_router
 from app.core.config import Settings, get_settings
+from app.core.errors import register_exception_handlers
 from app.core.logging import configure_logging
 from app.core.metrics import MetricsMiddleware
 from app.core.rate_limit import InMemoryRateLimitBackend, RateLimiter, RedisRateLimitBackend
@@ -59,8 +60,28 @@ def create_app(
     configure_logging(resolved)
     application = FastAPI(
         title=resolved.app_name,
+        description=(
+            "High-throughput event ingestion and aggregation API. "
+            "Authenticate with the X-API-Key header. Write paths are rate-limited per key. "
+            "OpenAPI is the source of truth for request and response schemas."
+        ),
+        version="0.1.0",
         debug=resolved.debug,
         lifespan=lifespan,
+        docs_url="/docs",
+        redoc_url="/redoc",
+        openapi_tags=[
+            {"name": "health", "description": "Liveness and readiness probes."},
+            {"name": "observability", "description": "Prometheus scrape endpoint."},
+            {"name": "auth", "description": "Current API-key identity and admin ping."},
+            {"name": "api-keys", "description": "Admin lifecycle for API keys."},
+            {"name": "events", "description": "Single and batch event ingest."},
+            {"name": "usage", "description": "Per-key rate-limit quota."},
+            {"name": "aggregates", "description": "Named metric aggregates and timeseries."},
+            {"name": "queries", "description": "Constrained ad-hoc aggregations."},
+        ],
+        contact={"name": "Pulse"},
+        license_info={"name": "Proprietary"},
     )
     application.state.settings = resolved
     if session_factory is not None:
@@ -76,6 +97,7 @@ def create_app(
     else:
         application.state.rate_limiter = RateLimiter(InMemoryRateLimitBackend())
         application.state.rate_limiter_locked = False
+    register_exception_handlers(application)
     application.add_middleware(MetricsMiddleware)
     application.add_middleware(RequestContextMiddleware)
     application.include_router(health_router)

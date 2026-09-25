@@ -47,7 +47,7 @@ class InMemoryRateLimitBackend:
 class RedisRateLimitBackend:
     """Fixed-window counters stored in Redis."""
 
-    def __init__(self, client: Redis[bytes]) -> None:
+    def __init__(self, client: Redis) -> None:
         self._client = client
 
     async def increment(self, key: str, window_seconds: int) -> int:
