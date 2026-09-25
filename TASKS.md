@@ -33,7 +33,7 @@ Status values: `pending` | `in_progress` | `done`
 
 ## 4. feat: Prometheus metrics endpoint
 
-- [ ] Status: pending
+- [ ] Status: in_progress
 - `GET /metrics` using prometheus_client.
 - Basic request counters / histograms middleware.
 - Tests that `/metrics` returns text/plain and contains expected metric names.
