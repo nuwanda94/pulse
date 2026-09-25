@@ -85,7 +85,7 @@ Status values: `pending` | `in_progress` | `done`
 
 ## 11. feat: metric aggregation queries
 
-- [ ] Status: in_progress
+- [x] Status: done
 - `GET /v1/metrics/{name}` – current aggregate (count/sum/avg).
 - `GET /v1/metrics/{name}/timeseries` – bucketed series.
 - Background or on-read aggregation from events.
