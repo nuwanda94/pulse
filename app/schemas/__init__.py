@@ -2,6 +2,7 @@
 
 from app.schemas.api_key import ApiKeyCreate, ApiKeyCreated, ApiKeyPublic
 from app.schemas.event import EventBatchCreate, EventBatchRead, EventCreate, EventRead
+from app.schemas.usage import UsageRead
 
 __all__ = [
     "ApiKeyCreate",
@@ -11,4 +12,5 @@ __all__ = [
     "EventBatchRead",
     "EventCreate",
     "EventRead",
+    "UsageRead",
 ]

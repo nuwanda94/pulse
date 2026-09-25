@@ -77,7 +77,7 @@ Status values: `pending` | `in_progress` | `done`
 
 ## 10. feat: rate limiting per API key
 
-- [ ] Status: in_progress
+- [x] Status: done
 - Redis-backed token-bucket or sliding-window limiter.
 - Apply as dependency/middleware on write endpoints.
 - `GET /v1/usage` showing remaining quota.

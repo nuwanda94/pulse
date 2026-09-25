@@ -8,7 +8,7 @@ from fastapi import APIRouter, Depends, Header, Request, status
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.core.auth import require_api_key
+from app.core.rate_limit_dep import enforce_write_rate_limit
 from app.db.session import get_db
 from app.models import ApiKey, Event
 from app.schemas.event import EventBatchCreate, EventBatchRead, EventCreate, EventRead
@@ -46,7 +46,7 @@ def _idempotency_store(request: Request) -> IdempotencyStore:
 @router.post("", response_model=EventRead, status_code=status.HTTP_201_CREATED)
 async def create_event(
     payload: EventCreate,
-    api_key: Annotated[ApiKey, Depends(require_api_key)],
+    api_key: Annotated[ApiKey, Depends(enforce_write_rate_limit)],
     session: Annotated[AsyncSession, Depends(get_db)],
 ) -> Event:
     """Persist a single event and return the stored record."""
@@ -61,7 +61,7 @@ async def create_event(
 async def create_events_batch(
     payload: EventBatchCreate,
     request: Request,
-    api_key: Annotated[ApiKey, Depends(require_api_key)],
+    api_key: Annotated[ApiKey, Depends(enforce_write_rate_limit)],
     session: Annotated[AsyncSession, Depends(get_db)],
     idempotency_key: Annotated[str | None, Header(alias="Idempotency-Key")] = None,
 ) -> EventBatchRead:
