@@ -18,7 +18,7 @@ Status values: `pending` | `in_progress` | `done`
 
 ## 2. chore: core config and settings
 
-- [ ] Status: in_progress
+- [x] Status: done
 - Implement `app/core/config.py` using Pydantic Settings (env-based).
 - Settings: app name, debug, database URL, redis URL, API key header name, rate-limit defaults, log level.
 - Add `.env.example`.
