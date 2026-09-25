@@ -93,7 +93,7 @@ Status values: `pending` | `in_progress` | `done`
 
 ## 12. feat: lightweight ad-hoc query endpoint
 
-- [ ] Status: pending
+- [ ] Status: in_progress
 - `POST /v1/queries` – limited aggregation language or fixed operators.
 - Keep scope small; reject complex queries.
 - Tests.
