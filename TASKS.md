@@ -8,7 +8,7 @@ Status values: `pending` | `in_progress` | `done`
 
 ## 1. chore: project foundation
 
-- [ ] Status: in_progress
+- [x] Status: done
 - Create `pyproject.toml` with modern tooling (ruff, mypy/ty, pytest, httpx, fastapi, uvicorn, pydantic-settings, sqlalchemy[asyncio], asyncpg, redis, prometheus-client, orjson, structlog, alembic, locust).
 - Add `Makefile` with targets: `lint`, `typecheck`, `test`, `format`, `benchmark`.
 - Add `.gitignore`, `.python-version` (3.12), `ruff.toml` / config in pyproject.
