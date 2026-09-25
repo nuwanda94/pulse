@@ -6,6 +6,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, async_sessionmaker
 
+from app.api.api_keys import router as api_keys_router
 from app.api.auth import router as auth_router
 from app.api.health import router as health_router
 from app.api.metrics import router as metrics_router
@@ -47,6 +48,7 @@ def create_app(
     application.include_router(health_router)
     application.include_router(metrics_router)
     application.include_router(auth_router)
+    application.include_router(api_keys_router)
     return application
 
 
