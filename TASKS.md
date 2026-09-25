@@ -9,7 +9,7 @@ Status values: `pending` | `in_progress` | `done`
 ## 1. chore: project foundation
 
 - [x] Status: done
-- Create `pyproject.toml` with modern tooling (ruff, mypy/ty, pytest, httpx, fastapi, uvicorn, pydantic-settings, sqlalchemy[asyncio], asyncpg, redis, prometheus-client, orjson, structlog, alembic, locust).
+- Create `pyproject.toml` with modern tooling (ruff, mypy, pytest, httpx, fastapi, uvicorn, pydantic-settings, sqlalchemy[asyncio], asyncpg, redis, prometheus-client, orjson, structlog, alembic, locust).
 - Add `Makefile` with targets: `lint`, `typecheck`, `test`, `format`, `benchmark`.
 - Add `.gitignore`, `.python-version` (3.12), `ruff.toml` / config in pyproject.
 - Add empty `app/` package structure and `tests/` skeleton.
@@ -33,7 +33,7 @@ Status values: `pending` | `in_progress` | `done`
 
 ## 4. feat: Prometheus metrics endpoint
 
-- [ ] Status: in_progress
+- [x] Status: done
 - `GET /metrics` using prometheus_client.
 - Basic request counters / histograms middleware.
 - Tests that `/metrics` returns text/plain and contains expected metric names.
