@@ -26,7 +26,7 @@ Status values: `pending` | `in_progress` | `done`
 
 ## 3. feat: health and readiness endpoints
 
-- [ ] Status: in_progress
+- [x] Status: done
 - `GET /health` (liveness) and `GET /ready` (checks postgres + redis connectivity).
 - Wire into FastAPI app in `app/main.py`.
 - Integration tests using TestClient / httpx + docker services (or mocked).
