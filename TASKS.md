@@ -55,7 +55,7 @@ Status values: `pending` | `in_progress` | `done`
 
 ## 7. feat: create / list / revoke API keys
 
-- [ ] Status: pending
+- [ ] Status: in_progress
 - `POST /v1/api-keys`, `GET /v1/api-keys`, `DELETE /v1/api-keys/{key_id}`.
 - Proper Pydantic schemas, hashing of secrets, never return full secret after creation except once.
 - Tests covering happy path and authorization failures.
