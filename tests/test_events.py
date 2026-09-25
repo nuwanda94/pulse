@@ -17,6 +17,8 @@ from app.models import ApiKey, Event
 
 RAW_USER_KEY = "pulse_user_secret"
 
+Factory = async_sessionmaker[AsyncSession]
+
 
 @pytest.fixture
 def settings() -> Settings:
@@ -24,7 +26,7 @@ def settings() -> Settings:
 
 
 @pytest.fixture
-async def sqlite_factory() -> AsyncIterator[async_sessionmaker[AsyncSession]]:
+async def sqlite_factory() -> AsyncIterator[Factory]:
     engine = create_async_engine(
         "sqlite+aiosqlite://",
         connect_args={"check_same_thread": False},
@@ -48,7 +50,7 @@ async def sqlite_factory() -> AsyncIterator[async_sessionmaker[AsyncSession]]:
 
 
 @pytest.fixture
-def client(settings: Settings, sqlite_factory: async_sessionmaker[AsyncSession]) -> Iterator[TestClient]:
+def client(settings: Settings, sqlite_factory: Factory) -> Iterator[TestClient]:
     app = create_app(settings, session_factory=sqlite_factory)
     with TestClient(app) as test_client:
         yield test_client
@@ -82,7 +84,7 @@ def test_ingest_validates_payload(client: TestClient) -> None:
     assert nested_tags.status_code == 422
 
 
-def test_ingest_persists_event(client: TestClient, sqlite_factory: async_sessionmaker[AsyncSession]) -> None:
+def test_ingest_persists_event(client: TestClient) -> None:
     headers = {"X-API-Key": RAW_USER_KEY}
     response = client.post(
         "/v1/events",
@@ -107,7 +109,7 @@ def test_ingest_persists_event(client: TestClient, sqlite_factory: async_session
 
 @pytest.mark.asyncio
 async def test_ingest_defaults_timestamp_and_round_trips(
-    client: TestClient, sqlite_factory: async_sessionmaker[AsyncSession]
+    client: TestClient, sqlite_factory: Factory
 ) -> None:
     headers = {"X-API-Key": RAW_USER_KEY}
     response = client.post(
