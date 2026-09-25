@@ -8,6 +8,7 @@ from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, async_sessionmaker
 
 from app.api.api_keys import router as api_keys_router
 from app.api.auth import router as auth_router
+from app.api.events import router as events_router
 from app.api.health import router as health_router
 from app.api.metrics import router as metrics_router
 from app.core.config import Settings, get_settings
@@ -49,6 +50,7 @@ def create_app(
     application.include_router(metrics_router)
     application.include_router(auth_router)
     application.include_router(api_keys_router)
+    application.include_router(events_router)
     return application
 
 
