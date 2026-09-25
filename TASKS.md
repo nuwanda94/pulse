@@ -120,7 +120,7 @@ Status values: `pending` | `in_progress` | `done`
 
 ## 16. chore: GitHub Actions CI
 
-- [ ] Status: pending
+- [ ] Status: in_progress
 - Workflow: lint → typecheck → unit/integration tests → (optional) short load test.
 - Cache dependencies, use services for postgres/redis.
 
