@@ -106,7 +106,7 @@ Status values: `pending` | `in_progress` | `done`
 
 ## 14. chore: Docker production image and compose for full stack
 
-- [ ] Status: pending
+- [ ] Status: in_progress
 - Multi-stage Dockerfile, non-root user, healthchecks.
 - Full `docker-compose.yml` including the app service.
 - Makefile targets to bring everything up.
