@@ -2,6 +2,7 @@
 
 from collections.abc import AsyncIterator
 
+from fastapi import Request
 from sqlalchemy.ext.asyncio import (
     AsyncEngine,
     AsyncSession,
@@ -28,4 +29,11 @@ async def get_session(
 ) -> AsyncIterator[AsyncSession]:
     """Yield a request-scoped session and close it afterwards."""
     async with session_factory() as session:
+        yield session
+
+
+async def get_db(request: Request) -> AsyncIterator[AsyncSession]:
+    """FastAPI dependency that yields a session from app.state.session_factory."""
+    factory: async_sessionmaker[AsyncSession] = request.app.state.session_factory
+    async with factory() as session:
         yield session
