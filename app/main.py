@@ -7,6 +7,7 @@ from fastapi import FastAPI
 from redis.asyncio import Redis
 from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, async_sessionmaker
 
+from app.api.aggregates import router as aggregates_router
 from app.api.api_keys import router as api_keys_router
 from app.api.auth import router as auth_router
 from app.api.events import router as events_router
@@ -78,6 +79,7 @@ def create_app(
     application.include_router(api_keys_router)
     application.include_router(events_router)
     application.include_router(usage_router)
+    application.include_router(aggregates_router)
     return application
 
 
