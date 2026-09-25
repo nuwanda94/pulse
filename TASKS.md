@@ -48,7 +48,7 @@ Status values: `pending` | `in_progress` | `done`
 
 ## 6. feat: API-key authentication
 
-- [ ] Status: pending
+- [ ] Status: in_progress
 - Dependency that extracts `X-API-Key`, looks up in DB (or in-memory for early stage), attaches current key to request state.
 - Admin-scoped operations protected.
 - Unit + integration tests for missing/invalid/valid keys.
