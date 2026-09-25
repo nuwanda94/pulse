@@ -100,7 +100,7 @@ Status values: `pending` | `in_progress` | `done`
 
 ## 13. chore: structured logging and request-id middleware
 
-- [ ] Status: in_progress
+- [x] Status: done
 - structlog setup, request-id generation/propagation, timing middleware.
 - Tests that logs contain expected fields (or that middleware runs).
 

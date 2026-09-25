@@ -16,8 +16,10 @@ from app.api.metrics import router as metrics_router
 from app.api.queries import router as queries_router
 from app.api.usage import router as usage_router
 from app.core.config import Settings, get_settings
+from app.core.logging import configure_logging
 from app.core.metrics import MetricsMiddleware
 from app.core.rate_limit import InMemoryRateLimitBackend, RateLimiter, RedisRateLimitBackend
+from app.core.request_context import RequestContextMiddleware
 from app.db.session import create_engine, create_session_factory
 
 
@@ -54,6 +56,7 @@ def create_app(
 ) -> FastAPI:
     """Build and return the Pulse FastAPI application."""
     resolved = settings or get_settings()
+    configure_logging(resolved)
     application = FastAPI(
         title=resolved.app_name,
         debug=resolved.debug,
@@ -74,6 +77,7 @@ def create_app(
         application.state.rate_limiter = RateLimiter(InMemoryRateLimitBackend())
         application.state.rate_limiter_locked = False
     application.add_middleware(MetricsMiddleware)
+    application.add_middleware(RequestContextMiddleware)
     application.include_router(health_router)
     application.include_router(metrics_router)
     application.include_router(auth_router)
