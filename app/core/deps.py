@@ -2,7 +2,7 @@
 
 from urllib.parse import urlparse
 
-import asyncpg  # type: ignore[import-not-found]
+import asyncpg  # type: ignore[import-untyped]
 from redis.asyncio import Redis
 
 
