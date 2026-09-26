@@ -16,9 +16,14 @@ BENCHMARK_SCRIPT = ROOT / "scripts" / "benchmark.py"
 
 
 def _load_benchmark_module():
-    spec = importlib.util.spec_from_file_location("pulse_benchmark", BENCHMARK_SCRIPT)
+    name = "pulse_benchmark"
+    if name in sys.modules:
+        return sys.modules[name]
+    spec = importlib.util.spec_from_file_location(name, BENCHMARK_SCRIPT)
     assert spec is not None and spec.loader is not None
     module = importlib.util.module_from_spec(spec)
+    # dataclasses inspects sys.modules[cls.__module__] while the class body runs
+    sys.modules[name] = module
     spec.loader.exec_module(module)
     return module
 
