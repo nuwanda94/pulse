@@ -18,7 +18,7 @@ python scripts/benchmark.py --live --host http://127.0.0.1:8000
 
 See `BENCHMARKS.md` after a run. Until then that file is a placeholder only.
 
-On GitHub Actions, measured (`--live`) benchmarks run **only** when you manually start the **CI** workflow (`workflow_dispatch`). Push and pull-request runs keep the dry-run job only; live results are uploaded as the `benchmarks` artifact.
+On GitHub Actions, measured (`--live`) benchmarks run **only** when you manually start the **CI** workflow (`workflow_dispatch`). Push and pull-request runs keep the dry-run job only. After a successful manual live run, `BENCHMARKS.md` is committed to the branch and also uploaded as the `benchmarks` artifact.
 
 ## Quickstart
 

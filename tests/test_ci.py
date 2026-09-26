@@ -25,3 +25,7 @@ def test_ci_workflow_exists() -> None:
     assert "github.event_name == 'workflow_dispatch'" in text
     assert "--live" in text
     assert "actions/upload-artifact" in text
+    # Measured results are committed back to the repo on manual runs.
+    assert "contents: write" in text
+    assert "git commit" in text
+    assert "BENCHMARKS.md" in text

@@ -98,12 +98,14 @@ jobs:
         run: python scripts/benchmark.py --dry-run --output BENCHMARKS.md --json
 
   # Measured RPS/latency only on explicit manual runs (Actions → CI → Run workflow).
-  # Never runs on push or pull_request.
+  # Never runs on push or pull_request. Writes BENCHMARKS.md back to the repo.
   live-benchmark:
     name: Live benchmark (manual)
     if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    permissions:
+      contents: write
     services:
       postgres:
         image: postgres:16-alpine
@@ -138,6 +140,8 @@ jobs:
       PULSE_BENCH_HOST: http://127.0.0.1:8000
     steps:
       - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
@@ -200,12 +204,23 @@ jobs:
             --api-key bench-key \
             --output BENCHMARKS.md \
             --json
-      - name: Upload BENCHMARKS.md
+      - name: Upload BENCHMARKS.md artifact
         uses: actions/upload-artifact@v4
         with:
           name: benchmarks
           path: BENCHMARKS.md
           if-no-files-found: error
+      - name: Commit BENCHMARKS.md to repository
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add BENCHMARKS.md
+          if git diff --staged --quiet; then
+            echo "BENCHMARKS.md unchanged; nothing to commit"
+          else
+            git commit -m "chore: update BENCHMARKS.md from live CI run"
+            git push origin "HEAD:${{ github.ref_name }}"
+          fi
       - name: Stop app
         if: always()
         run: |
