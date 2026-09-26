@@ -11,10 +11,14 @@ Implementation follows the ordered backlog in `TASKS.md`. All listed application
 Performance numbers are **not** claimed in this README. Generate them with the benchmark harness:
 
 ```bash
-make benchmark   # writes BENCHMARKS.md
+make benchmark   # writes BENCHMARKS.md (dry-run by default)
+# live numbers (requires a running stack):
+python scripts/benchmark.py --live --host http://127.0.0.1:8000
 ```
 
 See `BENCHMARKS.md` after a run. Until then that file is a placeholder only.
+
+On GitHub Actions, measured (`--live`) benchmarks run **only** when you manually start the **CI** workflow (`workflow_dispatch`). Push and pull-request runs keep the dry-run job only; live results are uploaded as the `benchmarks` artifact.
 
 ## Quickstart
 
